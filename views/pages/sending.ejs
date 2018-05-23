@@ -1,0 +1,32 @@
+<html>
+<title>wallet send page</title>
+<title>wallet transaction waiting page</title>
+<style>
+label.form_space {
+  display: block;
+  float:left;
+  text-align:right;
+  border:0px solid red;
+  width: 100px;
+}
+</style>
+<script>
+function reload() {
+  setTimeout(function(){window.location.href = '/wallet/send?action=sending&txhash=<%= txhash %>';}, 3000);
+}
+</script>
+<body onload="reload()" style="background-color: #fff;  background-image: url('/assets/images/spinning-wait-icons/wait30.gif'); background-repeat: no-repeat; background-attachment: fixed; background-position: 50% 50%;">
+
+<div style="text-align:center; padding:5px; padding-top:1px;">
+<div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
+<center>
+  <h4>Please wait while the transaction is processed</h4>
+  <p>Transaction Hash: <%= txhash %></p>
+  <p>You will be redirect to the transaction details page when completed</p>
+  <p>or click <a href="/wallet">here</a> to go to wallet home</p>
+</center>
+</div>
+</div>
+
+</body>
+</html>

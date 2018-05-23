@@ -1,0 +1,55 @@
+<html>
+<title>CoinPi - Send Page</title>
+<style>
+label.form_space {
+  display: block;
+  float:left;
+  text-align:right;
+  border:0px solid red;
+  width: 100px;
+}
+</style>
+<body>
+
+<div style="text-align:center; padding:5px; padding-top:1px;">
+<div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
+
+<h1>CoinPi Wallet Send</h2>
+<%- include menu %>
+
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+<ul>
+<li> From: <%= address %> </li>
+<li> Balance: <%= balance %> ETH</li>
+</ul>
+  </div>
+
+  <div style="text-align:center; padding:5px; padding-top:1px;">
+  <div style="display:inline-block; text-align:left; margin-left:auto; margin-right:auto; border:1px solid grey; border-radius: 5px;">
+<% if (locals.errors) { %>
+  Errors:
+  <ul style="list-style-type: none; margin-top:0px;">
+  <% errors.forEach(function(obj) { %>
+    <li><%= obj %> </li>
+  <% }) %>
+  </ul>
+<% } %>
+
+
+<form method=post>
+<label class="form_space">Address to:</label><input type=text name='addr_to'/><br/>
+<label class="form_space">Amount:</label><input type=text name='amount' id='ampunt'/> ETH <label id='to_label'>&nbsp;</label><br/>
+<label class="form_space">&nbsp;</label><input type=submit value='Send Funds'/><br/>
+<input type=hidden name=addr value='<%= address %>'/>
+<input type=hidden name=bal value='<%= balance %>'/>
+<input type=hidden name=acount value='<%= acount %>'/>
+</form>
+  </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+<title>CoinPi - Wallet Framework </title>
+<style>
+label.form_space {
+  display: block;
+  float:left;
+  text-align:right;
+  border:0px solid red;
+  width: 120px;
+  padding-right: 5px;
+}
+</style>
+<body>
+
+<div style="text-align:center; padding:5px; padding-top:1px;">
+<div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
+
+<h1>CoinPi Wallet Home</h2>
+<%- include menu %>
+
+<% if (locals.done_txhash) { %>
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+  <h4>Transaction Complete, details:</h4>
+  <span style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+  <% done_txhash.forEach(function(obj) { %>
+    <label class="form_space"><%= obj.label %>:</label> <%= obj.value %><br>
+  <% }) %>
+  </span>
+  </div>
+  <br>
+<% } %>
+
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+    HD Wallet Details
+    <ul style="list-style-type: none; text-align:left;">
+<!--
+    <li> Phrase: "<%= phrase %>" </li>
+//-->
+    <li> Address: <%= address %> </li>
+    <li> Balance: <%= balance %> ETH</li>
+    <li> <a href="/wallet/send?addr=<%= address %>&bal=<%= balance %>">send</a> </li>
+    <li> <a href="/wallet/txs?addr=<%= address %>">view tx history</a> </li>
+    </ul>
+  </div>
+  <br>
+
+
+<% keys.forEach(function(obj) { %>
+<div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px;">
+HD Wallet <%= obj.count %> Details</br>
+<ul style="list-style-type:none; margin:0 auto; overflow:auto;">
+  <li> Address: <%= obj.address %>  </li>
+  <li> Balance: <%= obj.balance %> ETH </li>
+  <li> <a href="/wallet/send?addr=<%= obj.address %>&bal=<%= obj.balance %>&acount=<%= obj.count %>">send</a> </li>
+  <li> 
+    <a href="/wallet/txs?addr=<%= obj.address %>">view tx history</a> 
+  </li>
+</ul>
+</div>
+<br>
+<% }) %>
+
+</div>
+</div>
+
+</body>
+</html>

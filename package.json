@@ -1,0 +1,34 @@
+{
+  "name": "wallet",
+  "version": "1.0.0",
+  "description": "HD Ethereum Cryto Wallet",
+  "main": "wallet_server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "wallet_server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gav@eh7.co.uk",
+  "license": "ISC",
+  "dependencies": {
+    "bitcore-lib": "^8.0.0",
+    "bitcore-mnemonic": "^1.5.0",
+    "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
+    "ethereumjs-tx": "^1.3.4",
+    "ethereumjs-wallet": "^0.6.0",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "keythereum": "^1.0.4",
+    "lodash": "^4.17.10",
+    "morgan": "^1.9.0",
+    "node-localstorage": "^1.3.1",
+    "parseurl": "^1.3.2",
+    "path": "^0.12.7",
+    "promise": "^8.0.1",
+    "solc": "^0.4.24",
+    "web3": "^1.0.0-beta.34"
+  }
+}

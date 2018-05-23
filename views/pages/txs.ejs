@@ -1,0 +1,31 @@
+<html>
+<title>wallet tx page for <%= address %></title>
+<body>
+
+<div style="text-align:center; padding:5px; padding-top:1px;">
+<div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
+
+<h1>Wallet Transaction Page</h1>
+<%- include menu %>
+<h4>Transactions for Ethereum Address: <%= address %></h4>
+<h4>No of transactions: <%= txs.length %></h4>
+<% if(txs.length > 0) { %>
+<table width=100% border>
+  <tr>
+    <td>To</td>
+    <td>Amount</td>
+  </tr>
+  <% txs.forEach(function(obj) { %>
+    <tr>
+      <td><%= obj.to %></td>
+      <td><%= obj.amount %></td>
+    </tr>
+  <% }); %>
+</table>
+<% }; %>
+
+</div>
+</div>
+
+</body>
+</html>
