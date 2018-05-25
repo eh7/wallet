@@ -132,15 +132,19 @@ app.post('/wallet/send', (req, res) => {
         var xpriv =  hdPrivateKey.xprivkey;
         var xpriv_pkey = eth_wallet.fromExtendedPrivateKey(xpriv);
         var privateKey;
-        if(acount > -1) {
+        if(acount == '') 
+          privateKey = xpriv_pkey.getPrivateKey();
+        else if(acount > -1) {
           var hdpk = hdPrivateKey.derive(44, true).derive(60,true).derive(0,true).derive(0).derive(Number(acount));
           var xpriv =  hdpk.xprivkey;
           var xpriv_pkey = eth_wallet.fromExtendedPrivateKey(xpriv);
           privateKey = xpriv_pkey.getPrivateKey();
-        } else
+        } else {
           privateKey = xpriv_pkey.getPrivateKey();
+        }
         var signedTx = new Tx(thisTx);
         signedTx.sign(privateKey);
+console.log(privateKey.toString('hex'));
         var serializedTx = signedTx.serialize();
         web3.eth.sendSignedTransaction("0x" + serializedTx.toString('hex'), function(err,hash){
 //console.log(err);
@@ -230,7 +234,7 @@ app.get('/wallet', (req, res) => {
     myCount = req.query.count;
     localStorage.setItem('myCount', myCount);
   } else if(req.query.add == 'true') {
-    if(myCount < 5)
+    if(myCount < 10)
       myCount++;
     localStorage.setItem('myCount', myCount);
   } else if(req.query.del == 'true') {
@@ -325,7 +329,7 @@ app.get('/clear', (req, res) => {
 
 app.get('/', (req, res) => res.redirect(301, '/wallet'));
 
-app.listen(port, () => console.log('Example app listening on port ' + port + '!'));
+app.listen(port, () => console.log('Example app listening on http://127.0.0.1:' + port));
 
 /*-----------------------------------------------------------------*/
 
