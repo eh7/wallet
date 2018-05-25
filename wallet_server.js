@@ -51,11 +51,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //---------------------------------------------------------------------//
 
+app.get('/wallet/apps', (req, res) => {
+
+  var data = {
+               "page_title":"CoinPi - Wallet Apps", 
+             };
+  res.render('pages/apps', data);
+});
+//---------------------------------------------------------------------//
+
 app.get('/wallet/txs', (req, res) => {
   web3.eth.getTransactionCount(req.query.addr, function(err,nonce) {
     if(err)
       console.log(err);
     var data = {
+                 page_title: "CoinPi - Transactions for "+req.query.addr,
                  address:req.query.addr,
                  count:nonce,
                  txs: [],
@@ -89,6 +99,7 @@ app.post('/wallet/send', (req, res) => {
   var to      = req.body.addr_to;
   var acount   = req.body.acount;
   var data = {
+    'page_title':'CoinPi - Send Tx Page',
     'addr':address,
     'bal':balance,
     'acount':acount,
@@ -193,6 +204,7 @@ app.get('/wallet/send', (req, res) => {
   var acount = req.query.acount  || req.body.acount;
 
   var data = {
+    'page_title':'CoinPi - Send Tx Page',
     'addr':addr,
     'txhash':'',
     'acount':acount,
@@ -289,6 +301,7 @@ app.get('/wallet', (req, res) => {
   .then(results => {
 
     var data = {
+      'page_title':"CoinPi - Wallet",
       'address':web3.utils.toChecksumAddress(myRootAddr),
       'pkey':myRootPKey,
       'phrase':myNKey,

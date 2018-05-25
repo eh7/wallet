@@ -1,35 +1,22 @@
-<html>
-<title>CoinPi - Wallet Framework </title>
-<style>
-label.form_space {
-  display: block;
-  float:left;
-  text-align:right;
-  border:0px solid red;
-  width: 120px;
-  padding-right: 5px;
-}
-</style>
-<body>
+<%- include page_head %>
 
 <div style="text-align:center; padding:5px; padding-top:1px;">
 <div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
 
-<h1>CoinPi Wallet Home</h2>
+<h1>CoinPi Wallet</h2>
 <%- include menu %>
 
 <% if (locals.done_txhash) { %>
   <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
   <h4>Transaction Complete, details:</h4>
-  <span style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
   <% done_txhash.forEach(function(obj) { %>
-    <label class="form_space"><%= obj.label %>:</label> <%= obj.value %><br>
+    <%= obj.label %>: <%= obj.value %><br>
   <% }) %>
-  </span>
   </div>
   <br>
 <% } %>
 
+  <%- include menu_wallet %><br/>
   <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
     HD Wallet Details
     <ul style="list-style-type: none; text-align:left;">
@@ -63,5 +50,4 @@ HD Wallet <%= obj.count %> Details</br>
 </div>
 </div>
 
-</body>
-</html>
+<%- include page_foot %>
