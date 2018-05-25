@@ -19,8 +19,8 @@ label.form_space {
 
   <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
 <ul>
-<li> From: <%= address %> </li>
-<li> Balance: <%= balance %> ETH</li>
+<li> From: <%= addr %> </li>
+<li> Balance: <%= bal %> ETH</li>
 </ul>
   </div>
 
@@ -40,8 +40,8 @@ label.form_space {
 <label class="form_space">Address to:</label><input type=text name='addr_to'/><br/>
 <label class="form_space">Amount:</label><input type=text name='amount' id='ampunt'/> ETH <label id='to_label'>&nbsp;</label><br/>
 <label class="form_space">&nbsp;</label><input type=submit value='Send Funds'/><br/>
-<input type=hidden name=addr value='<%= address %>'/>
-<input type=hidden name=bal value='<%= balance %>'/>
+<input type=hidden name=addr value='<%= addr %>'/>
+<input type=hidden name=bal value='<%= bal %>'/>
 <input type=hidden name=acount value='<%= acount %>'/>
 </form>
   </div>

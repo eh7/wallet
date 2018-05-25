@@ -72,6 +72,7 @@ app.get('/wallet/txs', (req, res) => {
                           'to':fs_data.txs[i].to,
                           'amount':web3.utils.fromWei(fs_data.txs[i].amount,'ether'),
                           'hash':fs_data.txs[i].hash,
+                          'timestamp':fs_data.txs[i].timestamp,
                         });
         }
         res.render('pages/txs', data);
@@ -88,8 +89,8 @@ app.post('/wallet/send', (req, res) => {
   var to      = req.body.addr_to;
   var acount   = req.body.acount;
   var data = {
-    'address':address,
-    'balance':balance,
+    'addr':address,
+    'bal':balance,
     'acount':acount,
   };
 
@@ -144,7 +145,7 @@ app.post('/wallet/send', (req, res) => {
         }
         var signedTx = new Tx(thisTx);
         signedTx.sign(privateKey);
-console.log(privateKey.toString('hex'));
+//console.log(privateKey.toString('hex'));
         var serializedTx = signedTx.serialize();
         web3.eth.sendSignedTransaction("0x" + serializedTx.toString('hex'), function(err,hash){
 //console.log(err);
@@ -163,12 +164,12 @@ console.log(privateKey.toString('hex'));
               if (err){
                   console.log(err);
                   var object = {'address':address,'txs':[]};
-                  object.txs.push({'to':to,'amount':web3.utils.toWei(amount),'hash':hash});
+                  object.txs.push({'to':to,'amount':web3.utils.toWei(amount),'hash':hash,"timestamp":''});
                   var json = JSON.stringify(object);
                   fs.writeFile(file, json, 'utf8', console.log(err)); 
               } else {
                 var object = JSON.parse(data); 
-                object.txs.push({'to':to,'amount':web3.utils.toWei(amount),'hash':hash});
+                object.txs.push({'to':to,'amount':web3.utils.toWei(amount),'hash':hash,"timestamp":''});
                 var json = JSON.stringify(object); 
                 fs.writeFile(file, json, 'utf8', console.log(err)); 
             }});
@@ -176,6 +177,7 @@ console.log(privateKey.toString('hex'));
   
             data.errors = errors;
             data.txhash = hash;
+            data.address = hash;
             res.render('pages/sending', data);
           }
         });
@@ -186,24 +188,26 @@ console.log(privateKey.toString('hex'));
 //---------------------------------------------------------------------//
 
 app.get('/wallet/send', (req, res) => {
-  var address = req.query.addr;
-  var balance = req.query.bal;
-  var acount  = req.query.acount;
+  var addr   = req.query.addr || req.body.addr;
+  var bal    = req.query.bal  || req.body.bal;
+  var acount = req.query.acount  || req.body.acount;
+
   var data = {
-    'address':address,
-    'balance':balance,
+    'addr':addr,
+    'txhash':'',
     'acount':acount,
+    'bal':bal
   };
 
+console.log(data);
   if(req.query.action === "sending"){
     console.log(data);
     data.txhash = req.query.txhash;
     web3.eth.getTransaction(req.query.txhash).then(function(txHash){
       console.log(txHash);
-      if(txHash.blockNumber > 0)
+      if(txHash.blockNumber > 0) {
         res.redirect(301, '/wallet?action=done&txhash=' + req.query.txhash)
-//        res.render('pages/wallet', data);
-      else
+      } else
         res.render('pages/sending', data);
     });
   } else
@@ -311,8 +315,23 @@ app.get('/wallet', (req, res) => {
         done_txhash.push({'label':"To", 'value':txHash.to});
         done_txhash.push({'label':"Value", 'value':web3.utils.fromWei(txHash.value, 'ether') + " ETH"});
         data.done_txhash = done_txhash;
-console.log(done_txhash);
-        res.render('pages/wallet', data);
+        web3.eth.getBlock(txHash.blockNumber).then(function(txBlock){
+          var file = "./eh7/" + txHash.from + ".json";
+          var timestamp = txBlock.timestamp;
+          fs.readFile(file, 'utf8', function(err, fs_data){
+            var json_data = JSON.parse(fs_data);
+            for(i=0;i<json_data.txs.length;i++) {
+              if(json_data.txs[i].hash == txHash.hash) {
+                json_data.txs[i].timestamp = timestamp;
+              }
+            }
+            var json_updated = JSON.stringify(json_data,null,2);
+            fs.writeFile(file, json_updated, function (err) {
+              if(err) console.log(err);
+              res.render('pages/wallet', data);
+            });
+          });
+        });
       });
 //        res.render('pages/wallet', data);
     } else

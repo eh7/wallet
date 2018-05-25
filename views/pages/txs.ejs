@@ -10,18 +10,18 @@
 <h4>Transactions for Ethereum Address: <%= address %></h4>
 <h4>No of transactions: <%= txs.length %></h4>
 <% if(txs.length > 0) { %>
-<table width=100% border>
-  <tr>
-    <td>To</td>
-    <td>Amount</td>
-  </tr>
-  <% txs.forEach(function(obj) { %>
-    <tr>
-      <td><%= obj.to %></td>
-      <td><%= obj.amount %></td>
-    </tr>
-  <% }); %>
-</table>
+  <div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px;">
+    <div style="display: inline-block; text-align:left;">
+    <% txs.forEach(function(obj) { %>
+    <% var date    = new Date(obj.timestamp*1000); %>
+    To: <%= obj.to %><br>
+    Amount: <%= obj.amount %> ether<br>
+    Date: <%= date %><br>
+    Hash: <%= obj.hash %><br>
+    <hr style="height: 1px;border:none;color:#333;background-color:#333;">
+    <% }); %>
+    </div>
+  </div>
 <% }; %>
 
 </div>

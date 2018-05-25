@@ -12,7 +12,7 @@ label.form_space {
 </style>
 <script>
 function reload() {
-  setTimeout(function(){window.location.href = '/wallet/send?action=sending&txhash=<%= txhash %>';}, 3000);
+  setTimeout(function(){window.location.href = '/wallet/send?action=sending&txhash=<%= txhash %>&address=<%= address %>';}, 3000);
 }
 </script>
 <body onload="reload()" style="background-color: #fff;  background-image: url('/assets/images/spinning-wait-icons/wait30.gif'); background-repeat: no-repeat; background-attachment: fixed; background-position: 50% 50%;">
