@@ -22,5 +22,31 @@
     <title><%= page_title %></title>
   </head>
 <body>
+<style>
+  .small { font: bold 24px monospace; fill: none; stroke: #000000; kerning:2; stroke-width: 1;}
+</style>
+
+<svg height="64" width="64">
+  <circle cx="32" cy="32" r="30" stroke="black" stroke-width="1" fill="white" />
+  <text x="13" y="40" fill="red" class="small">EH7</text>
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+
+<svg width="500" height="200">
+
+    <text x="20" y="40"
+          style="fill: #000000; stroke: none; font-size: 48px;">
+        Fill only
+    </text>
+    <text x="20" y="100"
+          style="fill: none; stroke: #000000;  font-size: 48px;">
+        Stroke only
+    </text>
+    <text x="20" y="150"
+          style="fill: #999999; stroke: #000000;  font-size: 48px;">
+        Fill and stroke
+    </text>
+</svg>
 
 
