@@ -3,7 +3,7 @@
 <%- include menu_wallet %><br/>
 
 <% if (locals.done_txhash) { %>
-  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px; width:100%; margin-bottom:5px; ">
   <h4>Transaction Complete, details:</h4>
   <% done_txhash.forEach(function(obj) { %>
     <%= obj.label %>: <%= obj.value %><br>
