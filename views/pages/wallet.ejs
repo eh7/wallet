@@ -1,10 +1,6 @@
 <%- include page_head %>
 
-<div style="text-align:center; padding:5px; padding-top:1px;">
-<div style="display:inline-block;border:1px solid grey; padding:5px; border-radius: 5px; ">
-
-<h1>CoinPi Wallet</h2>
-<%- include menu %>
+<%- include menu_wallet %><br/>
 
 <% if (locals.done_txhash) { %>
   <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
@@ -16,8 +12,7 @@
   <br>
 <% } %>
 
-  <%- include menu_wallet %><br/>
-  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px;">
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px; width:100%;">
     HD Wallet Details
     <ul style="list-style-type: none; text-align:left;">
 <!--
@@ -33,7 +28,7 @@
 
 
 <% keys.forEach(function(obj) { %>
-<div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px;">
+<div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px; width:100%;">
 HD Wallet <%= obj.count %> Details</br>
 <ul style="list-style-type:none; margin:0 auto; overflow:auto;">
   <li> Address: <%= obj.address %>  </li>

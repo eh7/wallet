@@ -10,6 +10,7 @@ var keythereum = require('keythereum');
 var solc = require('solc');
 var Web3 = require('web3');
 var Tx = require('ethereumjs-tx');
+var QRCode = require('qrcode');
 
 var web3 = new Web3(new Web3.providers.WebsocketProvider(config.web3_provider));
 
@@ -232,6 +233,11 @@ app.get('/wallet', (req, res) => {
   var myRootPKey;
   var keys = [];
 
+//console.log(1234567);
+//QRCode.toDataURL('I am a pony!', function (err, url) {
+// console.log("hhhh" + url)
+//})
+
   var code = new Mnemonic(config.myNKey);
   var hdPrivateKey = code.toHDPrivateKey();
   var xpriv =  hdPrivateKey.xprivkey;
@@ -287,6 +293,7 @@ app.get('/wallet', (req, res) => {
     var this_address = xpriv_pkey.getAddress().toString('hex');
 //console.log(this_address + " :: " + "\n");
     promise.push(getBalance(this_address));
+//    promise.push(getQRCode(this_address));
   }
 
 //  res.send('Wallet Page');
@@ -395,6 +402,11 @@ function decrypt(text){
   return dec;
 }
 //--------------------------------------------------------------------// 
+function getQRCode() {
+//  QRCode.toDataURL('I am a pony!', function (err, url) {
+//    console.log("hhhh" + url)
+//  })
+}
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 
