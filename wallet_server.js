@@ -246,12 +246,13 @@ app.get('/wallet', (req, res) => {
   myRootAddr = xpriv_pkey.getAddress().toString('hex');
   myRootPKey = xpriv_pkey.getPrivateKey().toString('hex');
 
+/*
   console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
   console.log("Pri: " + xpriv_pkey.getPrivateKey().toString('hex'));
   console.log("Pub: " + xpriv_pkey.getPublicKey().toString('hex'));
   console.log("xPub: " + xpub);
   //console.log(xpriv_pkey);
-
+*/
   if(req.query.count > -1) {
     myCount = req.query.count;
     localStorage.setItem('myCount', myCount);
@@ -269,6 +270,7 @@ app.get('/wallet', (req, res) => {
 
   var count = myCount;
   var promise = [];
+  var promiseQRCode = [];
 
   for(var i=0; i<count; i++) {
     var hdpk = hdPrivateKey.derive(44, true).derive(60,true).derive(0,true).derive(0).derive(i);
@@ -280,20 +282,21 @@ app.get('/wallet', (req, res) => {
 
     var xpriv =  hdpk.xprivkey;
     var xpriv_pkey = eth_wallet.fromExtendedPrivateKey(xpriv);
-    console.log("\n" + i);
+//    console.log("\n" + i);
 //    console.log("Pub:  " + xpriv_pkey.getPublicKey().toString('hex'));
-    console.log("Pri:  " + xpriv_pkey.getPrivateKey().toString('hex'));
-    console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
+//    console.log("Pri:  " + xpriv_pkey.getPrivateKey().toString('hex'));
+//    console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
     keys.push({  
                  count:i,
                  address:web3.utils.toChecksumAddress(xpriv_pkey.getAddress().toString('hex')),
+                 qrcode:'',
                  pubkey:xpriv_pkey.getPublicKey().toString('hex'),
                  prikey:xpriv_pkey.getPrivateKey().toString('hex'),
               });
     var this_address = xpriv_pkey.getAddress().toString('hex');
 //console.log(this_address + " :: " + "\n");
     promise.push(getBalance(this_address));
-//    promise.push(getQRCode(this_address));
+    promiseQRCode.push(getQRCode(this_address));
   }
 
 //  res.send('Wallet Page');
@@ -303,9 +306,15 @@ app.get('/wallet', (req, res) => {
   var this_address = myRootAddr;
 
   promise.push(getBalance(this_address));
+  promiseQRCode.push(getQRCode(this_address));
 
   Promise.all(promise)
   .then(results => {
+
+  Promise.all(promiseQRCode)
+  .then(resultsQRCodes => {
+
+//console.log(resultsQRCodes);
 
     var data = {
       'page_title':"CoinPi - Wallet",
@@ -314,18 +323,21 @@ app.get('/wallet', (req, res) => {
       'phrase':myNKey,
       'keys':keys,
       'balance':'this_balance',
+      'qrcode':'',
     };
 
     for(var i=0; i<results.length; i++) {
       var tmp = results.length-1;
       if(i == (results.length-1)) {
-        console.log(results.length-1);
+//        console.log(results.length-1);
         data.balance = results[i];
+        data.qrcode  = resultsQRCodes[i];
       } else {
         keys[i].balance = results[i];
+        keys[i].qrcode  = resultsQRCodes[i];
       }
     }
-    console.log(results);
+ //   console.log(results);
 
     var done_txhash = [];
     if(req.query.action == 'done'){
@@ -357,6 +369,7 @@ app.get('/wallet', (req, res) => {
     } else
       res.render('pages/wallet', data);
   });
+  });
 
 });
 //---------------------------------------------------------------------//
@@ -380,12 +393,24 @@ var getBalance = function(balance_addr) {
       else
       {
         balance = web3.utils.fromWei(balance, 'ether');
-        console.log(balance_addr + " :: " + balance);
+//        console.log(balance_addr + " :: " + balance);
         resolve(balance);
       }
     });
   });
 };
+
+//--------------------------------------------------------------------// 
+function getQRCode(code) {
+  return new Promise(function (resolve, reject) {
+    QRCode.toDataURL(code, function (err, url) {
+      if(err)
+        reject(err);
+      else 
+        resolve(url);
+    })
+  });
+}
 
 //--------------------------------------------------------------------// 
 function encrypt(text){
@@ -400,12 +425,6 @@ function decrypt(text){
   var dec = decipher.update(text,'hex','utf8')
   dec += decipher.final('utf8');
   return dec;
-}
-//--------------------------------------------------------------------// 
-function getQRCode() {
-//  QRCode.toDataURL('I am a pony!', function (err, url) {
-//    console.log("hhhh" + url)
-//  })
 }
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 

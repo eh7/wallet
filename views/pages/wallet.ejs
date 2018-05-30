@@ -12,14 +12,18 @@
   <br>
 <% } %>
 
+<div id="no_results" class="alert alert-warning" role="alert" style="display:none; display:inline-block;border:1px solid grey;text-align:center; padding:5px; margin-top:5px; border-radius: 5px; width:100%;">No results</div>
+
+ <div id="addresses" style="border:0px solid red;margin:0px;padding:0;">
   <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; border-radius: 5px; width:100%;">
-    HD Wallet Details
+    <img style="float:right;" src="<%= qrcode %>">
+    <span class="title">HD Wallet Details</span>
     <ul style="list-style-type: none; text-align:left;">
 <!--
     <li> Phrase: "<%= phrase %>" </li>
 //-->
-    <li> Address: <%= address %> </li>
-    <li> Balance: <%= balance %> ETH</li>
+    <li class="address"> Address: <%= address %> </li>
+    <li class="balance"> Balance: <%= balance %> ETH</li>
     <li> <a href="/wallet/send?addr=<%= address %>&bal=<%= balance %>">send</a> </li>
     <li> <a href="/wallet/txs?addr=<%= address %>">view tx history</a> </li>
     </ul>
@@ -28,19 +32,23 @@
 
 
 <% keys.forEach(function(obj) { %>
-<div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px; width:100%;">
-HD Wallet <%= obj.count %> Details</br>
-<ul style="list-style-type:none; margin:0 auto; overflow:auto;">
-  <li> Address: <%= obj.address %>  </li>
-  <li> Balance: <%= obj.balance %> ETH </li>
-  <li> <a href="/wallet/send?addr=<%= obj.address %>&bal=<%= obj.balance %>&acount=<%= obj.count %>">send</a> </li>
-  <li> 
-    <a href="/wallet/txs?addr=<%= obj.address %>">view tx history</a> 
-  </li>
-</ul>
-</div>
-<br>
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px; width:100%;">
+  <img style="float:right;" src="<%= obj.qrcode %>">
+  <span class="title">HD Wallet <%= obj.count %> Details</span></br>
+  <ul style="list-style-type:none; margin:0 auto; overflow:auto;">
+    <li class="address"> Address: <%= obj.address %>  </li>
+    <li class="balance"> Balance: <%= obj.balance %> ETH </li>
+    <li> <a href="/wallet/send?addr=<%= obj.address %>&bal=<%= obj.balance %>&acount=<%= obj.count %>">send</a> </li>
+    <li> 
+      <a href="/wallet/txs?addr=<%= obj.address %>">view tx history</a> 
+    </li>
+  </ul>
+  </div>
+  <br>
 <% }) %>
+ </div>
+
+
 
 </div>
 </div>

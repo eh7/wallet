@@ -1,0 +1,66 @@
+
+<script>
+
+  $('#no_results').hide();
+
+//  var divs = [];
+
+  $(document).ready(function() {
+
+    $('#addresses').find('div').each(function(index, value) {
+      
+      var title_text = $(value).find('span.title').text();
+
+//      divs.push($(value));
+
+//      $(value).show();
+//      console.log(index);
+    
+
+    });
+
+  });
+
+$('#search').on('input',function(e){
+
+  var search_term = $(this).val().toLowerCase();
+
+  var i = 0;
+
+  $('#addresses').find('div').each(function(index, value) {
+
+    var title_text = $(value).find('span.title').text().toLowerCase();
+
+    var address = $(value).find('ul li.address').text().toLowerCase();
+
+    //console.log(address);
+
+    // console.log(title_text + " <> " + search_term)
+
+    if(
+        title_text.indexOf(search_term) >= 0 ||
+        address.indexOf(search_term) >= 0 
+      ) {
+
+      $(value).show();
+      $('#no_results').hide();
+
+      i++;
+
+      // console.log("yes -> " + title_text + " ::: " + title_text.indexOf(search_term))
+
+    } else {
+
+      $(value).hide();
+
+      // console.log("no -> " + title_text + " ::: " + title_text.indexOf(search_term))
+
+    }
+
+  });
+
+  if(i == 0)
+    $('#no_results').show();
+
+});
+</script>
