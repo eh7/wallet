@@ -10,6 +10,10 @@
     "start": "node wallet_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/eh7/wallet.git"
+  },
   "author": "gav@eh7.co.uk",
   "license": "ISC",
   "dependencies": {
