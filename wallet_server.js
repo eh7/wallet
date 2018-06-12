@@ -52,10 +52,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //---------------------------------------------------------------------//
 
+app.get('/wallet/community', (req, res) => {
+
+  var data = {
+               "page_title":"Wallet Systems - Community", 
+             };
+  res.render('pages/community', data);
+});
+//---------------------------------------------------------------------//
 app.get('/wallet/apps', (req, res) => {
 
   var data = {
-               "page_title":"CoinPi - Wallet Apps", 
+               "page_title":"Wallet System - Wallet Apps", 
              };
   res.render('pages/apps', data);
 });
@@ -66,7 +74,7 @@ app.get('/wallet/txs', (req, res) => {
     if(err)
       console.log(err);
     var data = {
-                 page_title: "CoinPi - Transactions for "+req.query.addr,
+                 page_title: "Wallet System - Transactions for "+req.query.addr,
                  address:req.query.addr,
                  count:nonce,
                  txs: [],
@@ -100,7 +108,7 @@ app.post('/wallet/send', (req, res) => {
   var to      = req.body.addr_to;
   var acount   = req.body.acount;
   var data = {
-    'page_title':'CoinPi - Send Tx Page',
+    'page_title':'Wallet System - Send Tx Page',
     'addr':address,
     'bal':balance,
     'acount':acount,
@@ -205,7 +213,7 @@ app.get('/wallet/send', (req, res) => {
   var acount = req.query.acount  || req.body.acount;
 
   var data = {
-    'page_title':'CoinPi - Send Tx Page',
+    'page_title':'Wallet System - Send Tx Page',
     'addr':addr,
     'txhash':'',
     'acount':acount,
@@ -246,6 +254,7 @@ app.get('/wallet', (req, res) => {
   myRootAddr = xpriv_pkey.getAddress().toString('hex');
   myRootPKey = xpriv_pkey.getPrivateKey().toString('hex');
 
+  console.log("Pri: " + xpriv_pkey.getPrivateKey().toString('hex'));
 /*
   console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
   console.log("Pri: " + xpriv_pkey.getPrivateKey().toString('hex'));
@@ -296,7 +305,7 @@ app.get('/wallet', (req, res) => {
     var this_address = xpriv_pkey.getAddress().toString('hex');
 //console.log(this_address + " :: " + "\n");
     promise.push(getBalance(this_address));
-    promiseQRCode.push(getQRCode(this_address));
+    promiseQRCode.push(getQRCode("0x"+this_address));
   }
 
 //  res.send('Wallet Page');
@@ -306,7 +315,7 @@ app.get('/wallet', (req, res) => {
   var this_address = myRootAddr;
 
   promise.push(getBalance(this_address));
-  promiseQRCode.push(getQRCode(this_address));
+  promiseQRCode.push(getQRCode("0x"+this_address));
 
   Promise.all(promise)
   .then(results => {
@@ -317,7 +326,7 @@ app.get('/wallet', (req, res) => {
 //console.log(resultsQRCodes);
 
     var data = {
-      'page_title':"CoinPi - Wallet",
+      'page_title':"Wallet System - Wallet",
       'address':web3.utils.toChecksumAddress(myRootAddr),
       'pkey':myRootPKey,
       'phrase':myNKey,
