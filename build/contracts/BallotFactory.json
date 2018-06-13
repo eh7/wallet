@@ -1,0 +1,403 @@
+{
+  "contractName": "BallotFactory",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_ballotId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "_voteId",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewVote",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a7230582007374a55f813d34e9b2114a33aaac4b6800344eba1523ab91dfcfde5b936bf0f0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a7230582007374a55f813d34e9b2114a33aaac4b6800344eba1523ab91dfcfde5b936bf0f0029",
+  "sourceMap": "51:138:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;51:138:0;;;;;;;",
+  "deployedSourceMap": "51:138:0:-;;;;;",
+  "source": "pragma solidity ^0.4.23;\n\nimport \"./ownable.sol\";\n\ncontract BallotFactory {\n\n  event NewVote(uint _ballotId, uint _voteId);\n\n  struct Ballot {\n    string name;\n    uint timestamp;\n  }\n\n  \n}\n",
+  "sourcePath": "/home/gavin/blockchain/wallet/contracts/ballotfactory.sol",
+  "ast": {
+    "absolutePath": "/home/gavin/blockchain/wallet/contracts/ballotfactory.sol",
+    "exportedSymbols": {
+      "BallotFactory": [
+        14
+      ]
+    },
+    "id": 15,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "absolutePath": "/home/gavin/blockchain/wallet/contracts/ownable.sol",
+        "file": "./ownable.sol",
+        "id": 2,
+        "nodeType": "ImportDirective",
+        "scope": 15,
+        "sourceUnit": 71,
+        "src": "26:23:0",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 14,
+        "linearizedBaseContracts": [
+          14
+        ],
+        "name": "BallotFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8,
+            "name": "NewVote",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4,
+                  "indexed": false,
+                  "name": "_ballotId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8,
+                  "src": "93:14:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "93:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6,
+                  "indexed": false,
+                  "name": "_voteId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8,
+                  "src": "109:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "109:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "92:30:0"
+            },
+            "src": "79:44:0"
+          },
+          {
+            "canonicalName": "BallotFactory.Ballot",
+            "id": 13,
+            "members": [
+              {
+                "constant": false,
+                "id": 10,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 13,
+                "src": "147:11:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 9,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "147:6:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 12,
+                "name": "timestamp",
+                "nodeType": "VariableDeclaration",
+                "scope": 13,
+                "src": "164:14:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "164:4:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Ballot",
+            "nodeType": "StructDefinition",
+            "scope": 14,
+            "src": "127:56:0",
+            "visibility": "public"
+          }
+        ],
+        "scope": 15,
+        "src": "51:138:0"
+      }
+    ],
+    "src": "0:190:0"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/gavin/blockchain/wallet/contracts/ballotfactory.sol",
+    "exportedSymbols": {
+      "BallotFactory": [
+        14
+      ]
+    },
+    "id": 15,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "absolutePath": "/home/gavin/blockchain/wallet/contracts/ownable.sol",
+        "file": "./ownable.sol",
+        "id": 2,
+        "nodeType": "ImportDirective",
+        "scope": 15,
+        "sourceUnit": 71,
+        "src": "26:23:0",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 14,
+        "linearizedBaseContracts": [
+          14
+        ],
+        "name": "BallotFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8,
+            "name": "NewVote",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4,
+                  "indexed": false,
+                  "name": "_ballotId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8,
+                  "src": "93:14:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "93:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6,
+                  "indexed": false,
+                  "name": "_voteId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8,
+                  "src": "109:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "109:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "92:30:0"
+            },
+            "src": "79:44:0"
+          },
+          {
+            "canonicalName": "BallotFactory.Ballot",
+            "id": 13,
+            "members": [
+              {
+                "constant": false,
+                "id": 10,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 13,
+                "src": "147:11:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 9,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "147:6:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 12,
+                "name": "timestamp",
+                "nodeType": "VariableDeclaration",
+                "scope": 13,
+                "src": "164:14:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "164:4:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Ballot",
+            "nodeType": "StructDefinition",
+            "scope": 14,
+            "src": "127:56:0",
+            "visibility": "public"
+          }
+        ],
+        "scope": 15,
+        "src": "51:138:0"
+      }
+    ],
+    "src": "0:190:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-06-13T12:18:25.696Z"
+}
