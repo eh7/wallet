@@ -7,7 +7,7 @@ contract BallotFactory is Ownable {
 //  event NewBallot(uint _ballotId, uint _ballotOwnerId, string _ballotDescription, address _ballotOwner);
   event NewBallot(uint ballotId, string _description, address _ballotOwner, uint _timestamp);
   event NewOption(uint _ballotId, string _description, uint _optionId);
-  event BallotOption(uint _ballotId, uint count);
+  event BallotOption(uint _ballotId, uint count, string _description);
   event NewVote(uint _ballotId, uint _voteId);
 
 /*
@@ -60,9 +60,9 @@ contract BallotFactory is Ownable {
     ballots[_ballotId].count = count;
   }
 
-  function getOptions(uint _ballotId) public view returns (string) {
-    uint count = ballots[_ballotId].count;
-    emit BallotOption(_ballotId, count);
+  function getOption(uint _ballotId, uint _count) public view returns (string) {
+    emit BallotOption(_ballotId, _count , options[_ballotId][_count]);
+    return options[_ballotId][_count];
   }
   
 //  function castVote() public {

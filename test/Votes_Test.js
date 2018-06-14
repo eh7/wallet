@@ -51,9 +51,9 @@ contract('BallotFactory', async(accounts) => {
     }
   });
 
-  it("check getOptions ", async() => {
-    option = await ballotFactory.getOptions(2,{from:owner});
-    console.log(option);
+  it("check getOption ", async() => {
+    option = await ballotFactory.getOption(2,1,{from:owner});
+    console.log("option = " + option);
   });
 
 /*
