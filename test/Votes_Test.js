@@ -4,38 +4,56 @@ var BallotFactory = artifacts.require("BallotFactory");
 //contract('BallotFactory', function(accounts) {
 contract('BallotFactory', async(accounts) => {
 
+  let owner = accounts[2];
+
   var ballotFactory;
+  var ballot = [];
+  var option;
 
   console.log(accounts)
   console.log(web3.eth.getBalance(accounts[0]).toNumber());
 
-  beforeEach('setup contract for each test', async function () {
-    ballotFactory = await BallotFactory.new({from:accounts[2]});
+  before('setup contract for each test', async function () {
+    ballotFactory = await BallotFactory.new({from:owner});
+    assert.equal(await ballotFactory.owner.call(), owner);
   })
 
   it("contract deployed", async() => {
-    console.log("Contract Address: " + BallotFactory.address);
+//    console.log("Contract Address: " + BallotFactory.address);
 //    ballotFactory = await BallotFactory.deployed();
   });
 
   it("owner correct", async() => {
     let owner  = await ballotFactory.owner.call();
-    assert.equal(owner,accounts[2], "not equal");
+    assert.equal(owner,owner, "not equal");
   });
 
   it("check newBallot", async() => {
-    let ballot = await ballotFactory.newBallot("description 1",{from:accounts[2]});
-    console.log(ballot.logs[0].args);
-    ballot = await ballotFactory.newBallot("description 2",{from:accounts[1]});
-    console.log(ballot.logs[0].args);
-    ballot = await ballotFactory.newBallot("description 3",{from:accounts[1]});
-    console.log(ballot.logs[0].args);
-    let ballots;
-    for(i=0;i<3;i++) {
+    for(i=0;i<4;i++) {
+      ballot.push(await ballotFactory.newBallot("description " + i,{from:owner}));
+//      console.log(ballot[i].logs[0].args);
+
       ballots = await ballotFactory.ballots.call(i);
-      console.log(ballots);
+
+      assert.equal(owner,accounts[2]);
+
+//      console.log(ballots);
+
    }
 //    assert.equal(owner,accounts[2], "not equal");
+  });
+
+  it("check addOptions", async() => {
+    for(i=0;i<4;i++){
+      option = await ballotFactory.addOption("option " + i, 2,{from:owner});
+  console.log(option.logs[0].args);
+      assert.equal(option.logs[0].args._optionId.toNumber(),i);
+    }
+  });
+
+  it("check getOptions ", async() => {
+    option = await ballotFactory.getOptions(2,{from:owner});
+    console.log(option);
   });
 
 /*
