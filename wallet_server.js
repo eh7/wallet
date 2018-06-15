@@ -52,12 +52,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //---------------------------------------------------------------------//
 
-app.get('/wallet/community', (req, res) => {
+app.get('/wallet/coms', (req, res) => {
 
   var data = {
-               "page_title":"Wallet Systems - Community", 
+               "page_title":"Wallet Systems - Coms", 
              };
-  res.render('pages/community', data);
+
+  res.render('pages/coms', data);
 });
 //---------------------------------------------------------------------//
 app.get('/wallet/apps', (req, res) => {

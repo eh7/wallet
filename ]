@@ -37,40 +37,31 @@ contract('BallotFactory', async(accounts) => {
 
       assert.equal(owner,accounts[2]);
 
-//      console.log(ballots);
+      console.log(ballots);
 
    }
 //    assert.equal(owner,accounts[2], "not equal");
   });
-
+/*
   it("check addOptions", async() => {
     for(i=0;i<4;i++){
-      for(j=0;j<4;j++){
-        option = await ballotFactory.addOption("option " + i, j,{from:owner});
-        assert.equal(option.logs[0].args._optionId.toNumber(),i);
-//        console.log(option.logs[0].args);
-      }
+      option = await ballotFactory.addOption("option " + i, 2,{from:owner});
+  console.log(option.logs[0].args);
+//      assert.equal(option.logs[0].args._optionId.toNumber(),i);
     }
   });
 
   it("check getOption ", async() => {
-    let ballotId = 3;
-    let count = 2;
-    ballots = await ballotFactory.ballots.call(ballotId);
-    option = await ballotFactory.getOption(ballotId,count,{from:owner});
-    assert.equal(option,"option " + count);
-//    console.log("option = " + option);
-//    console.log("ballots = " + ballots);
+    option = await ballotFactory.getOption(2,1,{from:owner});
+//    assert.equal(option.logs[0].args._optionId.toNumber(),i);
+    console.log("option = " + option);
   });
 
   it("check castVote ", async() => {
-    let ballotId = 1;
-    let vote = await ballotFactory.castVote(ballotId, 1, {from:owner});
-    let votes = await ballotFactory.votes.call(ballotId,owner);
-    
-    console.log("vote = " + JSON.stringify(vote.logs[0], null, 2));
-    console.log("votes = " + JSON.stringify(votes, null, 2));
+    let vote = await ballotFactory.castVote(2,0,{from:owner});
+//    console.log("vote = " + vote);
   });
+*/
 /*
   it("Check count is 0", function() {
 
