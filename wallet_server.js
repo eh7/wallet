@@ -12,9 +12,22 @@ var Web3 = require('web3');
 var Tx = require('ethereumjs-tx');
 var QRCode = require('qrcode');
 
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+/*
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
+bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+  // Store hash in your password DB.
+  console.log(hash);
+});
+*/
+
 var web3 = new Web3(new Web3.providers.WebsocketProvider(config.web3_provider));
 
 const express = require('express');
+const session = require('express-session');
 const app = express();
 var bodyParser = require("body-parser");
 var path        = require('path');
@@ -47,15 +60,116 @@ app.set('superSecret', config.secret);
 app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
+
+app.use(session({
+  secret: config.secret,
+  resave: false,
+  saveUninitialized: true
+}));
+
+
 app.use('/assets', express.static(path.join(__dirname + '/assets')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(checkForWalletPassword);
+app.use(checkAuthed);
+//---------------------------------------------------------------------//
+
+app.post('/wallet/auth', (req, res) => {
+
+  var errors = [];
+
+  var data = {
+               "page_title":"Wallet Systems - Setup and Auth", 
+             };
+
+  if(req.body.passphrase != req.body.passphraseCheck) {
+    errors.push("Passphrase and Passphrase Check did not match!");
+    data.errors = errors;
+    res.render('pages/auth', data);
+  } else if(req.body.passphrase == "") {
+    errors.push("Passphrase can not be empty!");
+    data.errors = errors;
+    res.render('pages/auth', data);
+  } else {
+
+    /* bcrypt and save passpharse */
+    bcrypt.hash(req.body.passphrase, saltRounds, function(err, hash) {
+      console.log(hash);
+
+      req.session.authed = true;
+
+      var file = "./eh7/my.json";
+      fs.writeFile(file, JSON.stringify({hash:hash}), 'utf8', console.log(err)); 
+
+      /* use this for now while testing */
+//      errors.push("Passphrase Setup Completed");
+//      data.errors = errors;
+//      res.render('pages/auth', data);
+    
+      /* this line when live */
+      res.redirect("/wallet");
+    });
+    
+  }
+
+//  console.log(req.body);
+//  console.log(req.body.passphrase);
+//  console.log(req.body.passphraseCheck);
+
+});
+//---------------------------------------------------------------------//
+
+app.post('/wallet/login', (req, res) => {
+
+  var errors = [];
+
+  var data = {
+               "page_title":"Wallet Systems - Login", 
+               errors:errors,
+             };
+
+  res.render('pages/login', data);
+});
+//---------------------------------------------------------------------//
+
+app.get('/wallet/login', (req, res) => {
+
+  var errors = [];
+
+  var data = {
+               "page_title":"Wallet Systems - Login", 
+               errors:errors,
+             };
+
+  res.render('pages/login', data);
+});
+//---------------------------------------------------------------------//
+
+app.get('/wallet/auth', (req, res) => {
+
+  var errors = [];
+
+  var data = {
+               "page_title":"Wallet Systems - Setup Authentication", 
+               errors:errors,
+             };
+
+  res.render('pages/auth', data);
+});
 //---------------------------------------------------------------------//
 
 app.get('/wallet/coms', (req, res) => {
 
+  var coms = [
+               'message',
+               'voip',
+               'video',
+               'file share'];
+
   var data = {
                "page_title":"Wallet Systems - Coms", 
+               "coms":coms,
              };
 
   res.render('pages/coms', data);
@@ -63,8 +177,19 @@ app.get('/wallet/coms', (req, res) => {
 //---------------------------------------------------------------------//
 app.get('/wallet/apps', (req, res) => {
 
+  var apps = [
+               'governance',
+               'wallet services',
+               'wallet data services',
+               'communications',
+               'payments',
+               'products',
+               'services',
+               'tickets',
+               'games'];
   var data = {
                "page_title":"Wallet System - Wallet Apps", 
+               "apps":apps,
              };
   res.render('pages/apps', data);
 });
@@ -437,6 +562,64 @@ function decrypt(text){
   return dec;
 }
 //--------------------------------------------------------------------// 
+
+function checkAuthed(req, res, next){
+  console.log("checkAuthed");
+//  console.log(req.session.hash);
+
+  if(req.session.authed == true) {
+    next();
+  } else {
+
+    console.log("no hash");
+
+console.log("check and update req.session.authed if match : " + req.body.passphrase);
+
+    var file = "./eh7/my.json";
+
+    fs.readFile(file, 'utf8', function(err, fs_data){
+
+      var fs_data_obj = JSON.parse(fs_data);
+
+      bcrypt.compare(req.body.passphrase, fs_data_obj.hash, function(err, result) {
+
+        console.log(result);
+
+        if(result == true) {
+
+          req.session.authed = true;
+
+          res.redirect("/wallet");
+
+        } else if (req.path==='/wallet/login') {
+
+          next();
+
+        } else {
+          res.redirect("/wallet/login");
+        }
+      });
+    });
+
+  }
+}
+//--------------------------------------------------------------------// 
+
+function checkForWalletPassword(req, res, next){
+
+  var file = "./eh7/my.json";
+  fs.readFile(file, 'utf8', function(err, fs_data){
+    console.log("checkForWalletPassword");
+//    console.log(req);
+
+    if (req.path==='/wallet/auth') {
+      next();
+    } else if(err) {
+      console.log("need to create my.json");
+      res.redirect("/wallet/auth");
+    } else next();
+  });
+}
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 

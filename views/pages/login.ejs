@@ -1,0 +1,31 @@
+<%- include page_head %>
+
+
+ <div id="addresses" style="border:0px solid red;margin:0px;padding:0;">
+  <div style="display:inline-block;border:1px solid grey;text-align:left; padding:5px; margin-top:5px; border-radius: 5px; width:100%;">
+
+  <h5>Enter passphrase to access your wallet</h5>
+
+  <% errors.forEach(function(obj) { %>
+    <ul class="text-warning">
+    <li><%= obj %></li>
+    </ul>
+  <% }); %>
+
+  <form method="POST">
+    <div class="form-group">
+      <label>Passphrase</label>
+      <input type="password" class="form-control" id="passphrase" name="passphrase" aria-describedby="passphraseHelp" placeholder="Enter passphrase">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  </div>
+ </div>
+
+
+
+</div>
+</div>
+
+<%- include page_foot %>
