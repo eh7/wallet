@@ -15,15 +15,6 @@ var QRCode = require('qrcode');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-/*
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
-bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-  // Store hash in your password DB.
-  console.log(hash);
-});
-*/
-
 //var web3 = new Web3(new Web3.providers.WebsocketProvider(config.web3_provider));
 var web3 = new Web3(new Web3.providers.HttpProvider(config.web3_provider_http));
 
@@ -53,6 +44,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 var myNKey = localStorage.getItem('myNKey');
 var myCount = localStorage.getItem('myCount');
 
+
 //var parseurl = require('parseurl');
 
 const port = process.argv[2] || 9999;
@@ -61,8 +53,11 @@ const port = process.argv[2] || 9999;
 if(myNKey == '') {
   var code = new Mnemonic(Mnemonic.Words.ENGLISH);
   localStorage.setItem('myNKey', code);
+  storeMnemonic(code);
   localStorage.setItem('myCount', 0);
 }
+
+
 
 app.set('superSecret', config.secret);
 
@@ -632,5 +627,28 @@ function checkForWalletPassword(req, res, next){
   });
 }
 //--------------------------------------------------------------------// 
+function storeMnemonic(myCode){
+
+  var key = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+               16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+               29, 30, 31];
+ 
+  var text = myCode.toString(); 
+  var textBytes = aesjs.utils.utf8.toBytes(text);
+ 
+  var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
+  var encryptedBytes = aesCtr.encrypt(textBytes);
+ 
+  var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+  console.log(encryptedHex);
+ 
+  var encryptedBytes = aesjs.utils.hex.toBytes(encryptedHex);
+ 
+  var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(4));
+  var decryptedBytes = aesCtr.decrypt(encryptedBytes);
+ 
+  var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+  console.log(decryptedText);
+}
 //--------------------------------------------------------------------// 
 //--------------------------------------------------------------------// 
