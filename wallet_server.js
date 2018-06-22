@@ -24,7 +24,16 @@ bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
 });
 */
 
-var web3 = new Web3(new Web3.providers.WebsocketProvider(config.web3_provider));
+//var web3 = new Web3(new Web3.providers.WebsocketProvider(config.web3_provider));
+var web3 = new Web3(new Web3.providers.HttpProvider(config.web3_provider_http));
+
+web3.eth.net.isListening().then(() => {
+  console.log('web3 is connected');
+}).catch(e => {
+  console.log('web3!!!! Wow. Something went wrong');
+  process.exit();
+});
+
 
 const express = require('express');
 const session = require('express-session');
@@ -363,6 +372,8 @@ console.log(data);
 //---------------------------------------------------------------------//
 
 app.get('/wallet', (req, res) => {
+
+
   var myRootAddr;
   var myRootPKey;
   var keys = [];
