@@ -130,6 +130,28 @@ app.post('/wallet/auth', (req, res) => {
 });
 //---------------------------------------------------------------------//
 
+app.all('/wallet/user_services*', (req, res) => {
+
+  var errors = [];
+
+  var services = [
+                   {name:'Verify My Data',url:'/wallet/user_services/varify'},
+                   {name:'Validate User Address Hash',url:'/wallet/user_services/validate'},
+                 ];
+
+  if(req.url != "/wallet/user_services")
+    services = [];
+
+  var data = {
+               "page_title":"Wallet Systems - User Services", 
+               "errors":errors,
+               "services":services,
+             };
+
+  res.render('pages/user_services', data);
+});
+//---------------------------------------------------------------------//
+
 app.post('/wallet/login', (req, res) => {
 
   var errors = [];
@@ -188,15 +210,15 @@ app.get('/wallet/coms', (req, res) => {
 app.get('/wallet/apps', (req, res) => {
 
   var apps = [
-               'governance',
-               'wallet services',
-               'wallet data services',
-               'communications',
-               'payments',
-               'products',
-               'services',
-               'tickets',
-               'games'];
+               {url:'/wallet/user_services',name:'User Services'},
+               {url:'/wallet/decentralized_autonomous_organizations',name:'DAO (Decentralized Autonomous Organisation)'},
+               {url:'/wallet/crowd_sale',name:'Crown Sale'},
+               {url:'/wallet/games',name:'Crown Sale'},
+               {url:'/wallet/products',name:'Content'},
+               {url:'/wallet/products',name:'Products'},
+               {url:'/wallet/services',name:'Services'},
+               {url:'/wallet/tickets',name:'Tickets'}
+             ];
   var data = {
                "page_title":"Wallet System - Wallet Apps", 
                "apps":apps,
@@ -602,13 +624,21 @@ console.log("check and update req.session.authed if match : " + req.body.passphr
 
           req.session.authed = true;
 
-          res.redirect("/wallet");
+          var url = "/wallet";
+
+          if(req.session.loginUrl) {
+            url = req.session.loginUrl;
+            req.session.loginUrl = '';
+          } 
+
+          res.redirect(url);
 
         } else if (req.path==='/wallet/login') {
 
           next();
 
         } else {
+          req.session.loginUrl = req.url;
           res.redirect("/wallet/login");
         }
       });

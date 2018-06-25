@@ -1,0 +1,19 @@
+<%- include page_head %>
+
+<%- include menu_apps %>
+
+<h4>Wallet User Services</h4>
+
+<div style="text-align:left;">
+<% for(var i=0; i<services.length; i++) { %>
+<a href="<%= services[i].url %>"><%= services[i].name %></a><br>
+<% } %>
+
+<%- include user_services_varify %>
+
+</div>
+
+</div>
+</div>
+
+<%- include page_foot %>
