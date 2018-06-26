@@ -139,16 +139,26 @@ app.all('/wallet/user_services*', (req, res) => {
                    {name:'Validate User Address Hash',url:'/wallet/user_services/validate'},
                  ];
 
-  if(req.url != "/wallet/user_services")
-    services = [];
-
   var data = {
                "page_title":"Wallet Systems - User Services", 
                "errors":errors,
                "services":services,
              };
 
-  res.render('pages/user_services', data);
+  if(req.url == "/wallet/user_services/varify"){
+    data.full_name = req.body.full_name;
+    data.email = req.body.email;
+    data.address = req.body.address;
+    data.address2 = req.body.address2;
+    data.city = req.body.city;
+    data.region = req.body.region;
+    data.postcode = req.body.postcode;
+    data.services = [];
+    user_services_varify(req, res, data);
+//    res.render('pages/user_services_varify', data);
+  } else {
+    res.render('pages/user_services', data);
+  }
 });
 //---------------------------------------------------------------------//
 
@@ -212,12 +222,12 @@ app.get('/wallet/apps', (req, res) => {
   var apps = [
                {url:'/wallet/user_services',name:'User Services'},
                {url:'/wallet/decentralized_autonomous_organizations',name:'DAO (Decentralized Autonomous Organisation)'},
-               {url:'/wallet/crowd_sale',name:'Crown Sale'},
-               {url:'/wallet/games',name:'Crown Sale'},
-               {url:'/wallet/products',name:'Content'},
-               {url:'/wallet/products',name:'Products'},
-               {url:'/wallet/services',name:'Services'},
-               {url:'/wallet/tickets',name:'Tickets'}
+               {url:'/wallet/crowd_sale',name:'Crowd Sale'},
+               {url:'/wallet/game',name:'Game'},
+               {url:'/wallet/content',name:'Content'},
+               {url:'/wallet/product',name:'Product'},
+               {url:'/wallet/service',name:'Service'},
+               {url:'/wallet/ticket',name:'Ticket'}
              ];
   var data = {
                "page_title":"Wallet System - Wallet Apps", 
@@ -741,5 +751,15 @@ async function setupCode(){
   var myCode = await getMnemonic();
   myNKey = myCode;
   console.log(myCode);
+}
+//--------------------------------------------------------------------// 
+
+function user_services_varify(req, res, data){
+
+  var file = "./eh7/user_services_varify.json";
+  fs.writeFile(file, JSON.stringify(data), 'utf8', function(err){if(err) console.log(err);}); 
+  
+  res.render('pages/user_services_varify', data);
+
 }
 //--------------------------------------------------------------------// 
