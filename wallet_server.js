@@ -154,7 +154,26 @@ app.all('/wallet/user_services*', (req, res) => {
     data.region = req.body.region;
     data.postcode = req.body.postcode;
     data.services = [];
-    user_services_varify(req, res, data);
+    if(req.body.full_name)
+      user_services_varify(req, res, data);
+    else {
+      var file = "./eh7/user_services_varify.json";
+      fs.readFile(file, function(err, fs_data){
+        if(err) console.log(err);
+
+        var user_contract_json = JSON.parse(fs_data);
+        data.full_name = user_contract_json.full_name;
+        data.email = user_contract_json.email;
+        data.address = user_contract_json.address;
+        data.address2 = user_contract_json.address2;
+        data.city = user_contract_json.city;
+        data.region = user_contract_json.region;
+        data.postcode = user_contract_json.postcode;
+        data.services = [];
+
+        res.render('pages/user_services_varify', data);
+      }); 
+    }
 //    res.render('pages/user_services_varify', data);
   } else {
     res.render('pages/user_services', data);
@@ -425,10 +444,10 @@ app.get('/wallet', (req, res) => {
   myRootAddr = xpriv_pkey.getAddress().toString('hex');
   myRootPKey = xpriv_pkey.getPrivateKey().toString('hex');
 
-  console.log("Pri: " + xpriv_pkey.getPrivateKey().toString('hex'));
-/*
   console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
+/*
   console.log("Pri: " + xpriv_pkey.getPrivateKey().toString('hex'));
+  console.log("Addr: " + xpriv_pkey.getAddress().toString('hex'));
   console.log("Pub: " + xpriv_pkey.getPublicKey().toString('hex'));
   console.log("xPub: " + xpub);
   //console.log(xpriv_pkey);
@@ -758,8 +777,93 @@ function user_services_varify(req, res, data){
 
   var file = "./eh7/user_services_varify.json";
   fs.writeFile(file, JSON.stringify(data), 'utf8', function(err){if(err) console.log(err);}); 
-  
-  res.render('pages/user_services_varify', data);
 
+  // send request to User contract to add your personal data address hash
+  fs.readFile("build/contracts/User.json", function(err,fs_data){
+    if(err) console.log(err);
+    else { 
+      var user_contract_json = JSON.parse(fs_data);
+
+      var this_abi     = user_contract_json.abi;
+      var this_contract_address = user_contract_json.networks[51676].address;
+      var UserContract = new web3.eth.Contract(this_abi, this_contract_address);
+
+      var code = new Mnemonic(myNKey);
+      var hdPrivateKey = code.toHDPrivateKey();
+      var xpriv =  hdPrivateKey.xprivkey;
+      var xpub  =  hdPrivateKey.xpubkey;
+      var xpriv_pkey = eth_wallet.fromExtendedPrivateKey(xpriv);
+
+      var privateKey = xpriv_pkey.getPrivateKey();
+
+      var address_from = "0x" + xpriv_pkey.getAddress().toString('hex');
+
+      var string_data = "";
+      string_data += req.body.full_name;
+      string_data += req.body.email;
+      string_data += req.body.address;
+      string_data += req.body.address2;
+      string_data += req.body.city;
+      string_data += req.body.region;
+      string_data += req.body.postcode;
+console.log(string_data);
+
+//      console.log(UserContract);
+      
+      UserContract.methods.updateUser(string_data).estimateGas(function(error, gasAmount){
+          if(error)
+            console.log(error);
+          else
+            console.log("gasAmount: " + gasAmount);
+
+          web3.eth.getGasPrice(function(err, gasPrice) {
+
+            console.log("gasPrice: " + gasPrice);
+
+            var gasPriceHex = web3.utils.toHex(gasPrice);
+            var gasLimitHex = web3.utils.toHex(2000000);
+
+            web3.eth.getTransactionCount(address_from, function(err,nonce) {
+              if(err) {
+                console.log(err);
+                res.render('pages/user_services_varify', data);
+              } else {
+                var nonceHex = web3.utils.toHex(nonce);
+                var transValue = web3.utils.toHex(0);
+                var lodash = require('lodash');
+                var this_function_abi = lodash.find(this_abi, { name: 'updateUser' });
+                var payloadData = [string_data];
+                var txPayloadData = web3.eth.abi.encodeFunctionCall(this_function_abi, payloadData);
+
+                var thisTx = {
+                  from: address_from,
+                  to: this_contract_address,
+                  value: transValue,
+                  data: txPayloadData,
+                  nonce: nonceHex,
+                  gasPrice: gasPriceHex,
+                  gasLimit: gasLimitHex,
+                };
+
+                var signedTx = new Tx(thisTx);
+                signedTx.sign(privateKey);
+                var serializedTx = signedTx.serialize();
+
+                web3.eth.sendSignedTransaction("0x" + serializedTx.toString('hex'), function(err,hash){
+                  if(err){
+                    data.errors.push(err);
+                    res.render('pages/user_services_varify', data);
+                  } else {   
+                    data.errors.push("Transaction Sent");
+                    data.errors.push("Transaction Hash: " + hash);
+                    res.render('pages/user_services_varify', data);
+                  }
+                });
+              }
+            });
+          });
+        });
+    }
+  });
 }
 //--------------------------------------------------------------------// 

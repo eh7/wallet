@@ -12,8 +12,18 @@ contract User is Ownable {
   constructor() public {
   }
   
-  function updateUser(string data) public {
-    hash[msg.sender] = keccak256(data);
+  function updateUser(string _data) public {
+    hash[msg.sender] = keccak256(_data);
     emit UpdateUser(msg.sender, hash[msg.sender]);
   }
+
+  function validateUserData(string _data, bytes32 _hash) public pure returns (bool) {
+
+    if(keccak256(_data) == _hash) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
