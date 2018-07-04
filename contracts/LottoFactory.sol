@@ -11,6 +11,7 @@ contract LottoFactory is Ownable {
   struct Lotto {
     string name;
     uint timestamp;
+    uint endTimestamp;
     uint8 number;
   }
 
@@ -19,9 +20,9 @@ contract LottoFactory is Ownable {
   mapping (uint => address) public lottoOwner;
   mapping (address => uint) public lottoCount; 
 
-  function createLotto(string _name) public {
+  function newLotto(string _name) public {
     uint timestamp = now;
-    uint id = lottos.push(Lotto(_name, timestamp, lottoNumber)) - 1;
+    uint id = lottos.push(Lotto(_name, timestamp, 0, lottoNumber)) - 1;
     lottoCount[msg.sender]++;
     lottoOwner[id] = msg.sender;
     emit NewLotto(id, _name, timestamp, lottoCount[msg.sender], lottoNumber); 

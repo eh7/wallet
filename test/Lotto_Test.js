@@ -1,5 +1,6 @@
 var assert = require('assert');
 var LottoFactory = artifacts.require("LottoFactory");
+var LottoGame = artifacts.require("LottoFactory");
 
 contract('LottoFactory', async(accounts) => {
 
@@ -27,9 +28,9 @@ contract('LottoFactory', async(accounts) => {
     assert.equal(owner,owner, "not equal");
   });
 
-  it("check createLotto", async() => {
+  it("check newLotto", async() => {
 
-    var thisLottoFactory = await lottoFactory.createLotto("data",{from:owner});
+    var thisLottoFactory = await lottoFactory.newLotto("data",{from:owner});
 
 //    console.log(thisLottoFactory.logs[0].args);
 
@@ -42,17 +43,17 @@ contract('LottoFactory', async(accounts) => {
 
   });
 
-  it("check name createLotto", async() => {
+  it("check name newLotto", async() => {
 
     var name = "this is the lotto name";
-    var thisLottoFactory = await lottoFactory.createLotto(name,{from:owner});
+    var thisLottoFactory = await lottoFactory.newLotto(name,{from:owner});
     assert.equal(name, thisLottoFactory.logs[0].args.name, "not equal");
 
   });
 
-  it("check timestamp from createLotto", async() => {
+  it("check timestamp from newLotto", async() => {
     var name = "this is the lotto name 321";
-    var thisLottoFactory = await lottoFactory.createLotto(name,{from:owner});
+    var thisLottoFactory = await lottoFactory.newLotto(name,{from:owner});
     var count = thisLottoFactory.logs[0].args.lottoId.toNumber();
     var logsTimestamp = thisLottoFactory.logs[0].args.timestamp.toNumber();
     var lotto = await lottoFactory.lottos.call(count);
@@ -63,9 +64,9 @@ contract('LottoFactory', async(accounts) => {
   });
 
 /*
-  it("check number from createLotto", async() => {
+  it("check number from newLotto", async() => {
     var name = "this is the lotto name";
-    var thisLottoFactory = await lottoFactory.createLotto(name,{from:owner});
+    var thisLottoFactory = await lottoFactory.newLotto(name,{from:owner});
     var numbner = await lottoFactory.lottos[0].call();
   });
 */
