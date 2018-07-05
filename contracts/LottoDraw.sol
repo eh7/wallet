@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
-import "./LottoSetup.sol";
+import "./LottoPlay.sol";
 
-contract LottoDraw is LottoSetup {
+contract LottoDraw is LottoPlay {
 
   event NewLottoDraw(uint lottoId, uint8[6] numbers); 
     

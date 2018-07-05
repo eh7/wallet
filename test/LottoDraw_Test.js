@@ -1,5 +1,6 @@
 var assert = require('assert');
 var LottoDraw = artifacts.require("LottoDraw");
+var LottoPlay = artifacts.require("LottoPlay");
 
 contract('LottoDraw', async(accounts) => {
 
@@ -77,10 +78,23 @@ contract('LottoDraw', async(accounts) => {
     var lottoId = thisLottoFactory.logs[0].args.lottoId.toNumber();
     var duration = 60 * 10; // 10 minutes
     var thisLottoSetup = await lottoDraw.lottoSetup(lottoId, duration);
+    assert.equal(thisLottoSetup.logs[0].args.timestamp.toNumber()+duration,thisLottoSetup.logs[0].args.endTime.toNumber(),"endTime's not equal");
+    assert.equal(thisLottoSetup.logs[0].args.timestamp.toNumber()+duration,thisLottoSetup.logs[0].args.endTime.toNumber(),"endTime's not equal");
+
+//    lottoPlay = await LottoPlay.new({from:owner});
+
+    var lastNumber = 21;
+    var thisLottoPlay = await lottoDraw.playLotto(lottoId, [1,2,3,4,5,lastNumber]);
+    assert.equal(thisLottoPlay.logs[0].args.numbers.length, 6,"length of numbers not equal 6");
+    assert.equal(thisLottoPlay.logs[0].args.numbers[5].toNumber(), lastNumber,"lastNumber ie. numbers[5] not equal " + lastNumber);
+
+    await lottoDraw.playLotto(lottoId, [2,2,3,4,5,lastNumber]);
+    await lottoDraw.playLotto(lottoId, [3,2,3,4,5,lastNumber]);
+
     var thisLottoDraw = await lottoDraw.doLottoDraw(lottoId);
-console.log(thisLottoDraw.logs[0].args);
-//    assert.equal(thisLottoDraw.logs[0].args.timestamp.toNumber()+duration,thisLottoDraw.logs[0].args.endTime.toNumber(),"endTime's not equal");
-//    assert.equal(thisLottoDraw.logs[0].args.timestamp.toNumber()+duration,thisLottoDraw.logs[0].args.endTime.toNumber(),"endTime's not equal");
+    assert.equal(thisLottoDraw.logs[0].args.lottoId.toNumber(), lottoId,"LottoDraw Id's not equal");
+    assert.equal(thisLottoDraw.logs[0].args.numbers.length, 6, "LottoDraw number not equal 6");
+//console.log(thisLottoDraw.logs[0].args.numbers.length);
   });
 
 /*
