@@ -37,6 +37,12 @@ const Mnemonic = require('bitcore-mnemonic');
 const eth_wallet = require('ethereumjs-wallet')
 const aesjs = require('aes-js');
 
+/*
+  local jscript lib and require for games
+*/
+var Lotto = require('./libs/games/lotto.js'); 
+var lotto = new Lotto();
+
 if (typeof localStorage === "undefined" || localStorage === null) {
   var LocalStorage = require('node-localstorage').LocalStorage;
   localStorage = new LocalStorage('./scratch');
@@ -126,6 +132,38 @@ app.post('/wallet/auth', (req, res) => {
 //  console.log(req.body);
 //  console.log(req.body.passphrase);
 //  console.log(req.body.passphraseCheck);
+
+});
+//---------------------------------------------------------------------//
+
+app.all('/wallet/games*', (req, res) => {
+
+  console.log(req.url.search(/^\/wallet\/games\/lotto/));
+
+  if(req.url.search(/^\/wallet\/games\/lotto/) == 0) {
+
+    console.log(lotto.main(req, res));
+
+  } else {
+
+    console.log(lotto.listLiveGames(req, res));   
+    console.log(lotto.play());   
+    console.log(lotto.view());   
+
+    var errors = [];
+
+    var services = [
+                     {name:'Lotto',url:'/wallet/games/lotto'},
+                   ];
+
+    var data = {
+                 "page_title":"Wallet Systems - Games", 
+                 "errors":errors,
+                 "services":services,
+               };
+
+    res.render('pages/games', data);
+  }
 
 });
 //---------------------------------------------------------------------//
@@ -242,7 +280,7 @@ app.get('/wallet/apps', (req, res) => {
                {url:'/wallet/user_services',name:'User Services'},
                {url:'/wallet/decentralized_autonomous_organizations',name:'DAO (Decentralized Autonomous Organisation)'},
                {url:'/wallet/crowd_sale',name:'Crowd Sale'},
-               {url:'/wallet/game',name:'Game'},
+               {url:'/wallet/games',name:'Games'},
                {url:'/wallet/content',name:'Content'},
                {url:'/wallet/product',name:'Product'},
                {url:'/wallet/service',name:'Service'},

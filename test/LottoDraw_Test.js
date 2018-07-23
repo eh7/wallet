@@ -110,7 +110,7 @@ console.log(winners);
     try{
     var tmp = await lottoDraw.doLottoDraw(lottoId);
     } catch(error) { 
-      const revet = error.message.search('VM Exception while processing transaction: revert') >= 0;
+      const revet = error.message.search('VM Exception while processing transaction: revert');// >= 0;
       if(revet >= 0) {
 //        console.log(error.message);
         assert.equal(error.message, "VM Exception while processing transaction: revert", "checking require in doLottoDraw, should trigger error on second call");
