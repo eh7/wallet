@@ -2,7 +2,7 @@ my $sol_file = $ARGV[0];
 my $sol_contract_name = $ARGV[1];
 
 if($sol_contract_name eq "") {
-  print "USAGE: $0 <solidity_file_path> <Contract>\n";
+  print "USAGE: $0 <solidity_file_path> <Contract Name>\n";
   exit(1);
 }
 
@@ -12,8 +12,8 @@ $sol_contract_filename =~ s/^.*\/(.*)$/$1/;
 #print "$sol_file :: $sol_contract_name\n";
 #print "$sol_contract_filename\n";
 
-my $js_file = "js/deploy.js";
-my $js_init_file = "js/init.js";
+my $js_file = "js/deploy.".$sol_contract_name.".js";
+my $js_init_file = "js/init.".$sol_contract_name.".js";
 
 my $account_name = "eth.accounts[0]";
 

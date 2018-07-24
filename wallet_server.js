@@ -41,7 +41,7 @@ const aesjs = require('aes-js');
   local jscript lib and require for games
 */
 var Lotto = require('./libs/games/lotto.js'); 
-var lotto = new Lotto();
+var lotto = new Lotto(web3);
 
 if (typeof localStorage === "undefined" || localStorage === null) {
   var LocalStorage = require('node-localstorage').LocalStorage;
@@ -142,7 +142,7 @@ app.all('/wallet/games*', (req, res) => {
 
   if(req.url.search(/^\/wallet\/games\/lotto/) == 0) {
 
-    console.log(lotto.main(req, res));
+    console.log(lotto.main(req, res, web3));
 
   } else {
 
